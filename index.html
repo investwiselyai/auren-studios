@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1939651659965505');
+fbq('track', 'PageView');
+</script>
+<noscript>
+<img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1939651659965505&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel Code -->
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Auren Studios · Estruturação de Capital</title>
@@ -556,6 +575,24 @@ footer {
   margin: 0 auto;
 }
 </style>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1939651659965505');
+fbq('track', 'PageView');
+</script>
+<noscript>
+<img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1939651659965505&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel -->
 </head>
 <body>
 
@@ -582,7 +619,7 @@ footer {
     só aparece em conversa particular.
   </p>
 
-  <a href="#formulario" class="hero-cta">Quero fazer parte →</a>
+  <a href="#formulario" class="hero-cta" onclick="fbq('track','InitiateCheckout',{content_name:'CTA Hero Auren Studios'})">Quero fazer parte →</a>
 
   <div class="hero-scroll">role</div>
 </section>
@@ -787,6 +824,11 @@ function selPerfil(el, perfil){
   el.classList.add('sel');
   dados.perfil = perfil;
   document.getElementById('btnSt2').disabled = false;
+  // Meta Pixel — perfil de investidor selecionado
+  fbq('trackCustom', 'SelecionouPerfilInvestidor', {
+    content_name: perfil,
+    content_category: 'Perfil Investidor'
+  });
 }
 
 /* ── NAVEGAÇÃO ENTRE STEPS ── */
@@ -795,6 +837,15 @@ function goSt(n){
     dados.nome  = document.getElementById('fNome').value.trim();
     dados.tel   = document.getElementById('fTel').value.trim();
     dados.email = document.getElementById('fEmail').value.trim();
+    // Meta Pixel — dados preenchidos, avançou para perfil
+    fbq('trackCustom', 'PreencheuDados', { content_name: 'Step1 Completo' });
+  }
+  if(n === 3){
+    // Meta Pixel — selecionou perfil, chegou na confirmação
+    fbq('trackCustom', 'SelecionouPerfil', {
+      content_name: 'Step2 Completo',
+      perfil: dados.perfil
+    });
   }
   if(n === 3){
     document.getElementById('cNome').textContent   = dados.nome;
@@ -819,6 +870,7 @@ function goSt(n){
 var SHEETS_URL = 'https://script.google.com/macros/s/AKfycby24mD1IDHfwCqLNewY68ql7LYq358a5ouT6TZXQD0pvw7MkmBEEf6E8_JEMEictEXg/exec';
 
 function enviar(){
+  fbq('track', 'Lead');
   var btn = document.querySelector('#st3 .btn-prox');
   btn.disabled = true;
   btn.textContent = 'Enviando...';
@@ -840,12 +892,41 @@ function enviar(){
   })
   .catch(function(){})
   .finally(function(){
+    // Meta Pixel — Lead (conversão principal)
+    fbq('track', 'Lead', {
+      content_name: 'Auren Studios · Vila Clementino',
+      content_category: 'Imovel',
+      value: 0,
+      currency: 'BRL'
+    });
     document.querySelector('.form-progress').style.display = 'none';
     document.querySelectorAll('.step').forEach(function(s){ s.style.display = 'none'; });
     document.getElementById('successWrap').classList.add('active');
     document.getElementById('formulario').scrollIntoView({behavior:'smooth', block:'start'});
   });
 }
+
+// Meta Pixel — ViewContent ao visualizar formulário
+(function() {
+  var formSection = document.getElementById('formulario');
+  if (!formSection) return;
+  var fired = false;
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !fired) {
+        fired = true;
+        fbq('track', 'ViewContent', {
+          content_name: 'Formulario Auren Studios',
+          content_category: 'Imovel',
+          content_ids: ['auren-studios-vila-clementino'],
+          content_type: 'product'
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(formSection);
+})();
+
 </script>
 </body>
 </html>
